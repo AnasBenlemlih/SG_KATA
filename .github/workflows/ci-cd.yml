@@ -44,15 +44,11 @@ jobs:
         name: jar-file
         path: target/*.jar
 
-  # Job 2: Build et Push Docker Image
-  build-and-push:
+  # Job 2: Build Docker Image (sans push pour éviter les timeouts)
+  build-docker:
     needs: test-and-build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
-    permissions:
-      contents: read
-      packages: write
       
     steps:
     - name: Checkout code
@@ -69,37 +65,20 @@ jobs:
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-      
-    - name: Log in to Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Extract metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: |
-          type=ref,event=branch
-          type=ref,event=pr
-          type=sha,prefix={{branch}}-
-          type=raw,value=latest,enable={{is_default_branch}}
           
-    - name: Build and push Docker image
+    - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile.working
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        push: false
+        tags: foo-bar-quix:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
   # Job 3: Déploiement (optionnel - pour démo)
   deploy:
-    needs: build-and-push
+    needs: build-docker
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     
@@ -107,8 +86,11 @@ jobs:
     - name: Deploy to server
       run: |
         echo "🚀 Déploiement sur le serveur..."
-        echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+        echo "Image: foo-bar-quix:latest"
         echo "📝 Instructions de déploiement:"
         echo "1. Se connecter au serveur"
-        echo "2. docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-        echo "3. docker run -d -p 8080:8080 --name foo-bar-quix ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+        echo "2. Cloner le repository: git clone https://github.com/AnasBenlemlih/SG_KATA.git"
+        echo "3. Construire l'image: docker build -f Dockerfile.working -t foo-bar-quix ."
+        echo "4. Lancer l'app: docker run -d -p 8080:8080 --name foo-bar-quix foo-bar-quix"
+        echo ""
+        echo "🌐 Ou utiliser Railway/Render pour un déploiement automatique!"
