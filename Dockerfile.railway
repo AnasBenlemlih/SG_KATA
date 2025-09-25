@@ -1,0 +1,26 @@
+# Dockerfile optimisé pour Railway
+FROM eclipse-temurin:17-jdk
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers de configuration Maven
+COPY pom.xml .
+COPY src ./src
+COPY .mvn .mvn
+COPY mvnw .
+
+# Rendre mvnw exécutable
+RUN chmod +x mvnw
+
+# Build de l'application avec Maven
+RUN ./mvnw clean package -DskipTests
+
+# Copier le JAR construit
+RUN cp target/foo-bar-quix-1.0.0.jar app.jar
+
+# Exposer le port (Railway utilise la variable PORT)
+EXPOSE $PORT
+
+# Point d'entrée
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=$PORT"]
