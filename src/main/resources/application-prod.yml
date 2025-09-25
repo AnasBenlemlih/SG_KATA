@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: foo-bar-quix
+  
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/foobarquix}
+    driver-class-name: org.postgresql.Driver
+    username: ${DATABASE_USERNAME:foobarquix}
+    password: ${DATABASE_PASSWORD:foobarquix_password}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+  
+  batch:
+    job:
+      enabled: false
+  
+  # Configuration pour le monitoring
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        show-details: when-authorized
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${CONTEXT_PATH:}
+
+logging:
+  level:
+    com.kata.foobarquix: INFO
+    org.springframework.batch: WARN
+    org.springframework.web: WARN
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ${LOG_FILE_PATH:/var/log/foo-bar-quix/application.log}
+    max-size: 100MB
+    max-history: 30
+
+# Configuration des fichiers d'entrée/sortie
+app:
+  batch:
+    input-file: ${BATCH_INPUT_FILE:/app/input/numbers.txt}
+    output-file: ${BATCH_OUTPUT_FILE:/app/output/result.txt}

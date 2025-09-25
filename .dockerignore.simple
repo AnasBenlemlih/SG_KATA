@@ -1,0 +1,46 @@
+# .dockerignore pour Dockerfile.working
+# On garde target/ pour copier le JAR
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Documentation
+README.md
+docs/
+
+# Scripts de déploiement
+scripts/
+
+# Monitoring
+monitoring/
+
+# Fichiers temporaires
+*.tmp
+*.temp
+
+# Node modules (si présents)
+node_modules/
+
+# Fichiers de test
+src/test/
+
+# Autres Dockerfiles
+Dockerfile
+docker-compose*.yml
+Makefile

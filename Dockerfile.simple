@@ -1,0 +1,14 @@
+# Dockerfile simplifié pour test
+FROM openjdk:17-jdk-slim
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier le JAR (on va le construire d'abord avec Maven)
+COPY target/foo-bar-quix-1.0.0.jar app.jar
+
+# Exposer le port
+EXPOSE 8080
+
+# Point d'entrée
+ENTRYPOINT ["java", "-jar", "app.jar"]

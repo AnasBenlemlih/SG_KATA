@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: foo-bar-quix
+  
+  datasource:
+    url: jdbc:postgresql://postgres:5432/foobarquix
+    driver-class-name: org.postgresql.Driver
+    username: foobarquix
+    password: foobarquix_password
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  batch:
+    job:
+      enabled: false
+  
+  # Configuration pour le monitoring
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        show-details: always
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.kata.foobarquix: INFO
+    org.springframework.batch: INFO
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /app/logs/application.log
+
+# Configuration des fichiers d'entrée/sortie
+app:
+  batch:
+    input-file: /app/input/numbers.txt
+    output-file: /app/output/result.txt

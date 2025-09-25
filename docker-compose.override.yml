@@ -1,0 +1,39 @@
+# Fichier de surcharge pour le développement local
+# Ce fichier est automatiquement chargé par docker-compose
+
+version: '3.8'
+
+services:
+  foo-bar-quix:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JAVA_OPTS=-Xmx256m -Xms128m -Dspring.profiles.active=dev
+    volumes:
+      # Montage des sources pour le développement
+      - ./src:/app/src:ro
+      # Logs en local
+      - ./logs:/app/logs
+    ports:
+      # Port de debug (optionnel)
+      - "5005:5005"
+    command: >
+      sh -c "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 
+             -Dspring.profiles.active=dev 
+             -jar app.jar"
+
+  # Base de données H2 pour le développement
+  h2-db:
+    image: oscarfonts/h2:latest
+    container_name: foo-bar-quix-h2
+    ports:
+      - "8082:8082"
+    environment:
+      H2_OPTIONS: "-web -webAllowOthers -tcp -tcpAllowOthers -browser"
+    networks:
+      - foo-bar-quix-network
+    profiles:
+      - dev
+
+networks:
+  foo-bar-quix-network:
+    driver: bridge

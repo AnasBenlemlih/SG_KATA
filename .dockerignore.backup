@@ -1,0 +1,46 @@
+# Fichiers à ignorer lors de la construction de l'image Docker
+
+# Maven
+target/
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Documentation
+README.md
+docs/
+
+# Scripts de déploiement
+scripts/
+
+# Monitoring (sauf configuration nécessaire)
+monitoring/grafana/dashboards/*.json
+
+# Fichiers temporaires
+*.tmp
+*.temp
+
+# Node modules (si présents)
+node_modules/
+
+# Fichiers de test
+src/test/
