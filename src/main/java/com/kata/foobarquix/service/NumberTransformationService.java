@@ -26,7 +26,7 @@ public class NumberTransformationService {
         List<String> result = new ArrayList<>();
         String numberStr = String.valueOf(number);
 
-        // Règles de divisibilité (priorité)
+        // Règles de divisibilité
         if (number % 3 == 0) {
             result.add("FOO");
         }
@@ -34,15 +34,18 @@ public class NumberTransformationService {
             result.add("BAR");
         }
 
-        // Règles de contenu (seulement si pas déjà ajouté par divisibilité)
-        if (numberStr.contains("3") && !result.contains("FOO")) {
-            result.add("FOO");
-        }
-        if (numberStr.contains("5") && !result.contains("BAR")) {
-            result.add("BAR");
-        }
-        if (numberStr.contains("7")) {
-            result.add("QUIX");
+        // Règles de contenu (s'ajoutent en plus des règles de divisibilité)
+        // Compter chaque chiffre individuellement
+        for (char digit : numberStr.toCharArray()) {
+            if (digit == '3') {
+                result.add("FOO");
+            }
+            if (digit == '5') {
+                result.add("BAR");
+            }
+            if (digit == '7') {
+                result.add("QUIX");
+            }
         }
 
         // Si aucune règle ne s'applique, retourner le nombre original

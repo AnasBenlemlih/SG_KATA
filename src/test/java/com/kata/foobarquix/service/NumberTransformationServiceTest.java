@@ -38,7 +38,7 @@ class NumberTransformationServiceTest {
     @Test
     void testTransform_ContentRules() {
         assertEquals("FOO", transformationService.transform(13));  // contient 3
-        assertEquals("BAR", transformationService.transform(25));  // contient 5
+        assertEquals("BARBAR", transformationService.transform(25));  // divisible par 5 + contient 5
         assertEquals("QUIX", transformationService.transform(17)); // contient 7
     }
 
@@ -59,7 +59,7 @@ class NumberTransformationServiceTest {
 
     @Test
     void testTransform_EdgeCases() {
-        assertEquals("0", transformationService.transform(0));     // minimum
+        assertEquals("FOOBAR", transformationService.transform(0));     // minimum, divisible par 3 et 5
         assertEquals("BAR", transformationService.transform(100)); // maximum, divisible par 5
         assertEquals("2", transformationService.transform(2));     // aucun chiffre spécial
     }
