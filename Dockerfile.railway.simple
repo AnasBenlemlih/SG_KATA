@@ -1,0 +1,14 @@
+# Dockerfile ultra-simple pour Railway
+FROM eclipse-temurin:17-jre
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier le JAR (on va le construire d'abord)
+COPY target/foo-bar-quix-1.0.0.jar app.jar
+
+# Exposer le port
+EXPOSE 8080
+
+# Point d'entrée simple
+ENTRYPOINT ["java", "-jar", "app.jar"]

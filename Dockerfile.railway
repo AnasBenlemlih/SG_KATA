@@ -23,4 +23,4 @@ RUN cp target/foo-bar-quix-1.0.0.jar app.jar
 EXPOSE $PORT
 
 # Point d'entrée
-ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=$PORT"]
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=${PORT:-8080}"]
