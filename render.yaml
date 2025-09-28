@@ -5,6 +5,3 @@ services:
     buildCommand: mvn clean package -DskipTests
     startCommand: java -jar target/foo-bar-quix-1.0.0.jar
     healthCheckPath: /actuator/health
-    envVars:
-      - key: PORT
-        value: 8080
